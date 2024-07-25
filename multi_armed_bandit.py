@@ -71,7 +71,6 @@ def average_rewards(mab, algorithm, steps, runs=100):
         rewards = simulate(mab, algorithm, steps)
         all_rewards[run] = rewards
     average_rewards = np.mean(all_rewards, axis=0)
-    average_rewards[0] = 0  # Ensure the plot starts at 0
     return average_rewards
 
 def main():
