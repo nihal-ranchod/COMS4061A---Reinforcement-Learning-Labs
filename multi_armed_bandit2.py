@@ -70,26 +70,31 @@ def run_simulation(algorithm, bandit, param, steps, runs):
         all_rewards[run] = rewards
     return np.mean(all_rewards, axis=0)
 
-# Parameters
-k = 10
-steps = 1000
-runs = 100
+def main():
+    # Parameters
+    k = 10
+    steps = 1000
+    runs = 100
 
-# Initialize bandit
-bandit = Bandit(k)
+    # Initialize bandit
+    bandit = Bandit(k)
 
-# Run simulations
-epsilon_rewards = run_simulation(epsilon_greedy, bandit, 0.1, steps, runs)
-optimistic_rewards = run_simulation(greedy_optimistic, bandit, 5, steps, runs)
-ucb_rewards = run_simulation(ucb, bandit, 2, steps, runs)
+    # Run simulations
+    epsilon_rewards = run_simulation(epsilon_greedy, bandit, 0.1, steps, runs)
+    optimistic_rewards = run_simulation(greedy_optimistic, bandit, 5, steps, runs)
+    ucb_rewards = run_simulation(ucb, bandit, 2, steps, runs)
 
-# Plot results
-plt.figure(figsize=(10, 6))
-plt.plot(epsilon_rewards, label='𝜖-greedy (𝜖=0.1)')
-plt.plot(optimistic_rewards, label='Greedy (Q1=5)')
-plt.plot(ucb_rewards, label='UCB (c=2)')
-plt.xlabel('Steps')
-plt.ylabel('Average Reward')
-plt.legend()
-plt.title('Average Reward over Time')
-plt.show()
+    # Plot results
+    plt.figure(figsize=(10, 6))
+    plt.plot(epsilon_rewards, label='𝜖-greedy (𝜖=0.1)')
+    plt.plot(optimistic_rewards, label='Greedy (Q1=5)')
+    plt.plot(ucb_rewards, label='UCB (c=2)')
+    plt.xlabel('Steps')
+    plt.ylabel('Average Reward')
+    plt.legend()
+    plt.title('Average Reward over Time')
+    plt.show()
+
+if __name__ == '__main__':
+    main()
+
