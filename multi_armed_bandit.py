@@ -95,6 +95,8 @@ def main():
     plt.title('Average Reward over Time')
     plt.show()
 
+    # Part 2: Summary of Comparsion Plot with different hyperparameters 
+
     # Hyperparameter values
     epsilon_values = [0.01, 0.1, 0.2, 0.3]
     Q1_values = [5, 3, 1, 0.5]
@@ -111,7 +113,7 @@ def main():
     plt.plot(Q1_values, Q1_rewards, label='greedy with optimistic initialization', color='purple')
     plt.plot(c_values, c_rewards, label='UCB', color='deeppink')
     plt.xscale('log', base=2)
-    plt.xlabel('$ \epsilon / c / Q_0$')
+    plt.xlabel('$\epsilon \quad / \quad c \quad / \quad Q_0$')
     plt.ylabel('Average reward over first 1000 steps')
     plt.legend()
     plt.title('Summary comparison of algorithms')
