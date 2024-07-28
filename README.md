@@ -6,4 +6,4 @@
 
 ### Lab 1: Multi-Armed Bandits: 
 
-[Lab PDF](./Lab_1.pdf)
+[Lab PDF](.Lab 1/Lab_1.pdf)
