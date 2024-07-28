@@ -86,8 +86,8 @@ def main():
 
     # Plot results
     plt.figure(figsize=(10, 6))
-    plt.plot(epsilon_rewards, label='𝜖-greedy (𝜖=0.1)')
-    plt.plot(optimistic_rewards, label='Greedy (Q1=5)')
+    plt.plot(epsilon_rewards, label='Epsilon-Greedy ($\epsilon=0.1$)')
+    plt.plot(optimistic_rewards, label='Optimistic Greedy (Q1=5)')
     plt.plot(ucb_rewards, label='UCB (c=2)')
     plt.xlabel('Steps')
     plt.ylabel('Average Reward')
@@ -113,7 +113,7 @@ def main():
     plt.plot(Q1_values, Q1_rewards, label='greedy with optimistic initialization', color='black')
     plt.plot(c_values, c_rewards, label='UCB', color='blue')
     plt.xscale('log', base=2)
-    plt.xlabel('$ \epsilon /  c  /  Q_0$')
+    plt.xlabel('$ \epsilon / c / Q_0$')
     plt.ylabel('Average reward over first 1000 steps')
     plt.legend()
     plt.title('Summary comparison of algorithms')
