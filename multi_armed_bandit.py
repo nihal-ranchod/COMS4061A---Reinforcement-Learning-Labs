@@ -1,101 +1,121 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-class MAB:
-    def __init__(self, n_arms):
-        self.n_arms = n_arms
-        self.means = np.random.normal(0, 3, n_arms)
+class Bandit:
+    def __init__(self, k):
+        self.k = k
+        self.means = np.random.normal(0, np.sqrt(3), k)
     
     def pull(self, arm):
         return np.random.normal(self.means[arm], 1)
 
-class EpsilonGreedy:
-    def __init__(self, n_arms, epsilon):
-        self.n_arms = n_arms
-        self.epsilon = epsilon
-        self.q_values = np.zeros(n_arms)
-        self.arm_counts = np.zeros(n_arms)
-    
-    def select_arm(self):
-        if np.random.rand() < self.epsilon:
-            return np.random.randint(self.n_arms)
-        else:
-            return np.argmax(self.q_values)
-    
-    def update(self, arm, reward):
-        self.arm_counts[arm] += 1
-        self.q_values[arm] += (reward - self.q_values[arm]) / self.arm_counts[arm]
-
-class OptimisticGreedy:
-    def __init__(self, n_arms, initial_value):
-        self.n_arms = n_arms
-        self.q_values = np.full(n_arms, initial_value)
-        self.arm_counts = np.zeros(n_arms)
-    
-    def select_arm(self):
-        return np.argmax(self.q_values)
-    
-    def update(self, arm, reward):
-        self.arm_counts[arm] += 1
-        self.q_values[arm] += (reward - self.q_values[arm]) / self.arm_counts[arm]
-
-class UCB:
-    def __init__(self, n_arms, c):
-        self.n_arms = n_arms
-        self.c = c
-        self.q_values = np.zeros(n_arms)
-        self.arm_counts = np.zeros(n_arms)
-        self.total_counts = 0
-    
-    def select_arm(self):
-        self.total_counts += 1
-        ucb_values = self.q_values + self.c * np.sqrt(np.log(self.total_counts) / (self.arm_counts + 1e-5))
-        return np.argmax(ucb_values)
-    
-    def update(self, arm, reward):
-        self.arm_counts[arm] += 1
-        self.q_values[arm] += (reward - self.q_values[arm]) / self.arm_counts[arm]
-
-def simulate(mab, algorithm, steps):
+def epsilon_greedy(bandit, epsilon, steps):
+    k = bandit.k
+    Q = np.zeros(k)
+    N = np.zeros(k)
     rewards = np.zeros(steps)
-    for step in range(steps):
-        arm = algorithm.select_arm()
-        reward = mab.pull(arm)
-        algorithm.update(arm, reward)
-        rewards[step] = reward
+    
+    for t in range(steps):
+        if np.random.rand() < epsilon:
+            arm = np.random.choice(k)
+        else:
+            arm = np.argmax(Q)
+        
+        reward = bandit.pull(arm)
+        N[arm] += 1
+        Q[arm] += (reward - Q[arm]) / N[arm]
+        rewards[t] = reward
+    
     return rewards
 
-def average_rewards(mab, algorithm, steps, runs=100):
+def greedy_optimistic(bandit, Q1, steps):
+    k = bandit.k
+    Q = np.ones(k) * Q1
+    N = np.zeros(k)
+    rewards = np.zeros(steps)
+    
+    for t in range(steps):
+        arm = np.argmax(Q)
+        reward = bandit.pull(arm)
+        N[arm] += 1
+        Q[arm] += (reward - Q[arm]) / N[arm]
+        rewards[t] = reward
+    
+    return rewards
+
+def ucb(bandit, c, steps):
+    k = bandit.k
+    Q = np.zeros(k)
+    N = np.zeros(k)
+    rewards = np.zeros(steps)
+    
+    for t in range(steps):
+        if t < k:
+            arm = t
+        else:
+            ucb_values = Q + c * np.sqrt(np.log(t + 1) / (N + 1e-5))
+            arm = np.argmax(ucb_values)
+        
+        reward = bandit.pull(arm)
+        N[arm] += 1
+        Q[arm] += (reward - Q[arm]) / N[arm]
+        rewards[t] = reward
+    
+    return rewards
+
+def run_simulation(algorithm, bandit, param, steps, runs):
     all_rewards = np.zeros((runs, steps))
     for run in range(runs):
-        rewards = simulate(mab, algorithm, steps)
+        rewards = algorithm(bandit, param, steps)
         all_rewards[run] = rewards
-    average_rewards = np.mean(all_rewards, axis=0)
-    return average_rewards
+    return np.mean(all_rewards, axis=0)
 
 def main():
-    n_arms = 10
+    # Parameters
+    k = 10
     steps = 1000
     runs = 100
 
-    epsilon_greedy = EpsilonGreedy(n_arms, epsilon=0.1)
-    optimistic_greedy = OptimisticGreedy(n_arms, initial_value=5)
-    ucb = UCB(n_arms, c=2)
+    # Initialize bandit
+    bandit = Bandit(k)
 
-    epsilon_greedy_rewards = average_rewards(MAB(n_arms), epsilon_greedy, steps, runs)
-    optimistic_greedy_rewards = average_rewards(MAB(n_arms), optimistic_greedy, steps, runs)
-    ucb_rewards = average_rewards(MAB(n_arms), ucb, steps, runs)
+    # Run simulations
+    epsilon_rewards = run_simulation(epsilon_greedy, bandit, 0.1, steps, runs)
+    optimistic_rewards = run_simulation(greedy_optimistic, bandit, 5, steps, runs)
+    ucb_rewards = run_simulation(ucb, bandit, 2, steps, runs)
 
-    # Plotting average rewards over time
+    # Plot results
     plt.figure(figsize=(10, 6))
-    plt.plot(epsilon_greedy_rewards, label='Epsilon-Greedy (ε=0.1)')
-    plt.plot(optimistic_greedy_rewards, label='Optimistic Greedy (Q1=5)')
-    plt.plot(ucb_rewards, label='UCB (c=2)')
+    plt.plot(epsilon_rewards, label='Epsilon-Greedy ($\epsilon=0.1$)', color='lightseagreen')
+    plt.plot(optimistic_rewards, label='Optimistic Greedy (Q1=5)', color='purple')
+    plt.plot(ucb_rewards, label='UCB (c=2)', color='deeppink')
     plt.xlabel('Steps')
     plt.ylabel('Average Reward')
-    plt.title('Average Reward over Time for Different Algorithms')
     plt.legend()
+    plt.title('Average Reward over Time')
     plt.show()
 
-if __name__ == "__main__":
+    # Hyperparameter values
+    epsilon_values = [0.01, 0.1, 0.2, 0.3]
+    Q1_values = [5, 3, 1, 0.5]
+    c_values = [0.1, 0.5, 1, 2]
+
+    # Average rewards for different hyperparameters
+    epsilon_rewards = [np.mean(run_simulation(epsilon_greedy, bandit, epsilon, steps, runs)) for epsilon in epsilon_values]
+    Q1_rewards = [np.mean(run_simulation(greedy_optimistic, bandit, Q1, steps, runs)) for Q1 in Q1_values]
+    c_rewards = [np.mean(run_simulation(ucb, bandit, c, steps, runs)) for c in c_values]
+
+    # Plot results
+    plt.figure(figsize=(10, 6))
+    plt.plot(epsilon_values, epsilon_rewards, label='$\epsilon$-greedy', color='lightseagreen')
+    plt.plot(Q1_values, Q1_rewards, label='greedy with optimistic initialization', color='purple')
+    plt.plot(c_values, c_rewards, label='UCB', color='deeppink')
+    plt.xscale('log', base=2)
+    plt.xlabel('$ \epsilon / c / Q_0$')
+    plt.ylabel('Average reward over first 1000 steps')
+    plt.legend()
+    plt.title('Summary comparison of algorithms')
+    plt.show()
+
+if __name__ == '__main__':
     main()
