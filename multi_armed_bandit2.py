@@ -86,9 +86,9 @@ def main():
 
     # Plot results
     plt.figure(figsize=(10, 6))
-    plt.plot(epsilon_rewards, label='Epsilon-Greedy ($\epsilon=0.1$)')
-    plt.plot(optimistic_rewards, label='Optimistic Greedy (Q1=5)')
-    plt.plot(ucb_rewards, label='UCB (c=2)')
+    plt.plot(epsilon_rewards, label='Epsilon-Greedy ($\epsilon=0.1$)', color='lightseagreen')
+    plt.plot(optimistic_rewards, label='Optimistic Greedy (Q1=5)', color='purple')
+    plt.plot(ucb_rewards, label='UCB (c=2)', color='deeppink')
     plt.xlabel('Steps')
     plt.ylabel('Average Reward')
     plt.legend()
@@ -109,9 +109,9 @@ def main():
 
     # Plot results
     plt.figure(figsize=(10, 6))
-    plt.plot(epsilon_values, epsilon_rewards, label='$\epsilon$-greedy', color='red')
-    plt.plot(Q1_values, Q1_rewards, label='greedy with optimistic initialization', color='black')
-    plt.plot(c_values, c_rewards, label='UCB', color='blue')
+    plt.plot(epsilon_values, epsilon_rewards, label='$\epsilon$-greedy', color='lightseagreen')
+    plt.plot(Q1_values, Q1_rewards, label='greedy with optimistic initialization', color='purple')
+    plt.plot(c_values, c_rewards, label='UCB', color='deeppink')
     plt.xscale('log', base=2)
     plt.xlabel('$ \epsilon / c / Q_0$')
     plt.ylabel('Average reward over first 1000 steps')
