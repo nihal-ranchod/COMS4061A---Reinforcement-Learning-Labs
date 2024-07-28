@@ -93,7 +93,9 @@ def main():
     plt.ylabel('Average Reward')
     plt.legend()
     plt.title('Average Reward over Time')
+    plt.savefig('Avarege_Reward_over_Time.png')
     plt.show()
+    
 
     # Part 2: Summary of Comparsion Plot with different hyperparameters 
 
@@ -117,7 +119,9 @@ def main():
     plt.ylabel('Average reward over first 1000 steps')
     plt.legend()
     plt.title('Summary comparison of algorithms')
+    plt.savefig('Summary_comparison_of_algorithms.png')
     plt.show()
+    
 
 if __name__ == '__main__':
     main()
