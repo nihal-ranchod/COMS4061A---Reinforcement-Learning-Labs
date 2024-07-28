@@ -95,6 +95,30 @@ def main():
     plt.title('Average Reward over Time')
     plt.show()
 
+    # Part 2: Summary comparison plot with different hyperparameter values.
+
+    # Hyperparameter values
+    epsilon_values = [0.01, 0.1, 0.2, 0.3]
+    Q1_values = [5, 3, 1, 0.5]
+    c_values = [0.1, 0.5, 1, 2]
+
+    # Average rewards for different hyperparameters
+    epsilon_rewards = [np.mean(run_simulation(epsilon_greedy, bandit, epsilon, steps, runs)) for epsilon in epsilon_values]
+    Q1_rewards = [np.mean(run_simulation(greedy_optimistic, bandit, Q1, steps, runs)) for Q1 in Q1_values]
+    c_rewards = [np.mean(run_simulation(ucb, bandit, c, steps, runs)) for c in c_values]
+
+    # Plot results
+    plt.figure(figsize=(10, 6))
+    plt.plot(epsilon_values, epsilon_rewards, label='$\epsilon$-greedy', color='red')
+    plt.plot(Q1_values, Q1_rewards, label='greedy with optimistic initialization', color='black')
+    plt.plot(c_values, c_rewards, label='UCB', color='blue')
+    plt.xscale('log', base=2)
+    plt.xlabel('$ \epsilon /  c  /  Q_0$')
+    plt.ylabel('Average reward over first 1000 steps')
+    plt.legend()
+    plt.title('Summary comparison of algorithms')
+    plt.show()
+
 if __name__ == '__main__':
     main()
 
