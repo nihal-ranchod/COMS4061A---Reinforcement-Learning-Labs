@@ -110,7 +110,7 @@ def main():
     # Plot results
     plt.figure(figsize=(10, 6))
     plt.plot(epsilon_values, epsilon_rewards, label='$\epsilon$-greedy', color='lightseagreen')
-    plt.plot(Q1_values, Q1_rewards, label='greedy with optimistic initialization', color='purple')
+    plt.plot(Q1_values, Q1_rewards, label='Optimistic Greedy ', color='purple')
     plt.plot(c_values, c_rewards, label='UCB', color='deeppink')
     plt.xscale('log', base=2)
     plt.xlabel('$\epsilon \quad / \quad c \quad / \quad Q_0$')
