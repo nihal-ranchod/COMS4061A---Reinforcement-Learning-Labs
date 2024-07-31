@@ -6,7 +6,7 @@
 
 ### Lab 1: Multi-Armed Bandits: 
 
-[Lab PDF](./Lab%201/Lab_1.pdf)
+[Lab 1 PDF](./Lab%201/Lab_1.pdf)
 
 
 ### Lab 2: Markov Decision Processes
