@@ -119,8 +119,7 @@ def plot_trajectories(random_agent_trajectories, greedy_agent_trajectories):
         ax.set_yticks([])
         legend_labels = ['Path', 'Obstacle']
         legend_colors = ['skyblue', 'black']
-        handles = [plt.Line2D([0], [0], marker='o', color='w', label=label,
-                             markersize=10, markerfacecolor=color) for label, color in zip(legend_labels, legend_colors)]
+        handles = [plt.Line2D([0], [0], marker='o', color='w', label=label, markersize=10, markerfacecolor=color) for label, color in zip(legend_labels, legend_colors)]
         ax.legend(handles=handles, loc='center', bbox_to_anchor=(0.5, -0.05), ncol=2)
     
     plot_trajectory(ax1, random_agent_trajectories[0], 'Random Agent Trajectory')
