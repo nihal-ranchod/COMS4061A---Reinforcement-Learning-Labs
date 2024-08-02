@@ -100,7 +100,7 @@ def greedy_agent(env, optimal_value_grid, steps=50):
 
 # Plot sample trajectories
 def plot_trajectories(random_agent_trajectories, greedy_agent_trajectories):
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 7))
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 6))
     
     def plot_trajectory(ax, trajectory, title):
         grid = np.zeros((GRID_SIZE, GRID_SIZE))
@@ -109,23 +109,19 @@ def plot_trajectories(random_agent_trajectories, greedy_agent_trajectories):
         for x, y in trajectory:
             grid[x, y] = 1
         
-        cmap = mcolors.ListedColormap(['pink', 'green', 'darkgray'])
+        cmap = mcolors.ListedColormap(['black', 'gray', 'skyblue'])
         bounds = [-1, 0, 1, 2]
         norm = mcolors.BoundaryNorm(bounds, cmap.N)
-        cax = ax.imshow(grid, cmap=cmap, norm=norm, origin='upper')
+        ax.imshow(grid, cmap=cmap, norm=norm, origin='upper')
         
         ax.set_title(title)
-        ax.set_xticks(np.arange(GRID_SIZE))
-        ax.set_yticks(np.arange(GRID_SIZE))
-        ax.set_xticklabels(np.arange(0, GRID_SIZE))
-        ax.set_yticklabels(np.arange(0, GRID_SIZE))
-        ax.grid(True, which='both', linestyle='--', linewidth=0.7)
-        ax.set_xlabel('X Coordinate')
-        ax.set_ylabel('Y Coordinate')
-        
-        # Add color bar
-        cbar = plt.colorbar(cax, ax=ax, boundaries=bounds, ticks=[-1, 0, 1])
-        cbar.ax.set_yticklabels(['Untraveled', 'Path', 'Obstacle'])
+        ax.set_xticks([])
+        ax.set_yticks([])
+        legend_labels = ['Path', 'Obstacle']
+        legend_colors = ['skyblue', 'black']
+        handles = [plt.Line2D([0], [0], marker='o', color='w', label=label,
+                             markersize=10, markerfacecolor=color) for label, color in zip(legend_labels, legend_colors)]
+        ax.legend(handles=handles, loc='center', bbox_to_anchor=(0.5, -0.05), ncol=2)
     
     plot_trajectory(ax1, random_agent_trajectories[0], 'Random Agent Trajectory')
     plot_trajectory(ax2, greedy_agent_trajectories[0], 'Greedy Agent Trajectory')
@@ -147,8 +143,8 @@ def main():
     random_returns = [random_agent(env)[0] for _ in range(20)]
     greedy_returns = [greedy_agent(env, optimal_value_function)[0] for _ in range(20)]
 
-    print(f'Random Agent Returns: {random_returns}')
-    print(f'Greedy Agent Returns: {greedy_returns}')
+    #print(f'Random Agent Returns: {random_returns}')
+    #print(f'Greedy Agent Returns: {greedy_returns}')
     
     # Plot average returns
     plt.figure(figsize=(8, 6))
