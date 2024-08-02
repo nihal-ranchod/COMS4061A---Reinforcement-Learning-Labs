@@ -46,3 +46,13 @@ def value_iteration(V, theta=1e-6):
 optimal_V = value_iteration(V)
 print("Optimal Value Function:")
 print(optimal_V)
+
+# optimal_V = np.array([
+#     [0, 20, 19, 18, 17, 16, 15],
+#     [20, 19, 18, 17, 16, 15, 14],
+#     [19, 18, 17, 16, 15, 14, 13],
+#     [6, 7, 8, 9, 10, 11, 12],
+#     [5, 6, 7, 8, 9, 10, 11],
+#     [4, 5, 6, 7, 8, 9, 10],
+#     [3, 4, 5, 6, 7, 8, 9]
+# ])
