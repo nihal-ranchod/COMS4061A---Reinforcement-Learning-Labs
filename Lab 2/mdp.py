@@ -1,9 +1,7 @@
-# Nihal Ranchod -> 2427378
-# Lisa Godwin -> 2437980
-
 import numpy as np
 import random
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 
 class GridworldMDP:
     def __init__(self):
@@ -48,29 +46,32 @@ class GridworldMDP:
 def random_agent(env, steps=50):
     state = env.reset()
     total_reward = 0
+    trajectory = [state]
     for _ in range(steps):
         action = random.choice(env.actions)
         state, reward = env.step(action)
         total_reward += reward
+        trajectory.append(state)
         if state == env.goal_state:
             break
-    return total_reward
+    return total_reward, trajectory
 
 # Optimal Value Grid
-optimal_value_function = np.array(    [
-        [20, 19, 18, 17, 16, 15, 14],
-        [19, 18, 17, 16, 15, 14, 13],
-        [-1, -1, -1, -1, -1, -1, 12],
-        [5, 6, 7, 8, 9, 10, 11],
-        [4, 5, 6, 7, 8, 9, 10],
-        [3, 4, 5, 6, 7, 8, 9],
-        [2, 3, 4, 5, 6, 7, 8],
-    ])
+optimal_value_function = np.array([
+    [20, 19, 18, 17, 16, 15, 14],
+    [19, 18, 17, 16, 15, 14, 13],
+    [-1, -1, -1, -1, -1, -1, 12],
+    [5, 6, 7, 8, 9, 10, 11],
+    [4, 5, 6, 7, 8, 9, 10],
+    [3, 4, 5, 6, 7, 8, 9],
+    [2, 3, 4, 5, 6, 7, 8],
+])
 
 # Greedy Agent
 def greedy_agent(env, optimal_value_grid, steps=50):
     state = env.reset()
     total_reward = 0
+    trajectory = [state]
     for _ in range(steps):
         x, y = state
         best_action = None
@@ -92,22 +93,73 @@ def greedy_agent(env, optimal_value_grid, steps=50):
         
         state, reward = env.step(best_action)
         total_reward += reward
+        trajectory.append(state)
         if state == env.goal_state:
             break
-    return total_reward
+    return total_reward, trajectory
+
+# Plot sample trajectories
+def plot_trajectories(random_agent_trajectories, greedy_agent_trajectories):
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 7))
+    
+    def plot_trajectory(ax, trajectory, title):
+        grid = np.zeros((GRID_SIZE, GRID_SIZE))
+        for x, y in OBSTACLES:
+            grid[x, y] = -1
+        for x, y in trajectory:
+            grid[x, y] = 1
+        
+        cmap = mcolors.ListedColormap(['pink', 'green', 'darkgray'])
+        bounds = [-1, 0, 1, 2]
+        norm = mcolors.BoundaryNorm(bounds, cmap.N)
+        cax = ax.imshow(grid, cmap=cmap, norm=norm, origin='upper')
+        
+        ax.set_title(title)
+        ax.set_xticks(np.arange(GRID_SIZE))
+        ax.set_yticks(np.arange(GRID_SIZE))
+        ax.set_xticklabels(np.arange(0, GRID_SIZE))
+        ax.set_yticklabels(np.arange(0, GRID_SIZE))
+        ax.grid(True, which='both', linestyle='--', linewidth=0.7)
+        ax.set_xlabel('X Coordinate')
+        ax.set_ylabel('Y Coordinate')
+        
+        # Add color bar
+        cbar = plt.colorbar(cax, ax=ax, boundaries=bounds, ticks=[-1, 0, 1])
+        cbar.ax.set_yticklabels(['Untraveled', 'Path', 'Obstacle'])
+    
+    plot_trajectory(ax1, random_agent_trajectories[0], 'Random Agent Trajectory')
+    plot_trajectory(ax2, greedy_agent_trajectories[0], 'Greedy Agent Trajectory')
+    plt.tight_layout()
+    plt.show()
 
 def main():
-   # Run experiments
-    env = GridworldMDP()
-    random_returns = [random_agent(env) for _ in range(20)]
-    greedy_returns = [greedy_agent(env, optimal_value_function) for _ in range(20)]
+    # Define global variables for plotting
+    global GRID_SIZE, OBSTACLES
+    GRID_SIZE = 7
+    OBSTACLES = [(2, i) for i in range(6)]
 
-    print(random_returns)
-    print(greedy_returns)
-    # Plot results
-    plt.bar(['Random Agent', 'Greedy Agent'], [np.mean(random_returns), np.mean(greedy_returns)])
-    plt.ylabel('Average Return')
-    plt.show() 
+    # Run experiments
+    env = GridworldMDP()
+    random_trajectories = [random_agent(env)[1] for _ in range(20)]
+    greedy_trajectories = [greedy_agent(env, optimal_value_function)[1] for _ in range(20)]
+
+    # Compute average returns
+    random_returns = [random_agent(env)[0] for _ in range(20)]
+    greedy_returns = [greedy_agent(env, optimal_value_function)[0] for _ in range(20)]
+
+    print(f'Random Agent Returns: {random_returns}')
+    print(f'Greedy Agent Returns: {greedy_returns}')
     
+    # Plot average returns
+    plt.figure(figsize=(8, 6))
+    plt.bar(['Random Agent', 'Greedy Agent'], [np.mean(random_returns), np.mean(greedy_returns)], color=['skyblue', 'lightgreen'])
+    plt.ylabel('Average Return')
+    plt.title('Average Return of Agents')
+    plt.grid(axis='y', linestyle='--', linewidth=0.7)
+    plt.show()
+
+    # Plot sample trajectories
+    plot_trajectories(random_trajectories[:1], greedy_trajectories[:1])
+
 if __name__ == '__main__':
     main()
