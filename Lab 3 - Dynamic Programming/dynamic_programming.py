@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 class GridworldMDP:
     def __init__(self):
@@ -79,17 +80,21 @@ def policy_evaluation_two_array(env, gamma, theta):
     return V, iterations
 
 def plot_value_function(V, title):
-    plt.imshow(V, cmap='hot', interpolation='nearest')
-    plt.colorbar()
+    plt.figure(figsize=(6, 5))  # Adjust figure size if needed
+    sns.heatmap(V, annot=True, cmap='crest', cbar=True)
     plt.title(title)
+    plt.xlabel('Y axis')
+    plt.ylabel('X axis')  # Adjust labels as per your grid representation
     plt.show()
 
 def plot_iterations_vs_discount(gammas, iterations_in_place, iterations_two_array):
-    plt.plot(gammas, iterations_in_place, label='In-place')
-    plt.plot(gammas, iterations_two_array, label='Two-array')
+    plt.figure(figsize=(8, 6))  # Adjust figure size if needed
+    plt.plot(gammas, iterations_in_place, label='In-place', color="slateblue")
+    plt.plot(gammas, iterations_two_array, label='Two-array', color="deeppink")
     plt.xlabel('Discount Rate (gamma)')
     plt.ylabel('Iterations to Convergence')
     plt.xscale('log')
+    plt.title('Iterations vs Discount Rate')
     plt.legend()
     plt.show()
 
@@ -107,6 +112,6 @@ for gamma in gammas:
     iterations_two_array.append(it_two_array)
 
 V, _ = policy_evaluation_in_place(env, 1, theta)
-plot_value_function(V, 'Value Function for gamma = 1')
+plot_value_function(V, 'Value Function Heatmap for gamma = 1')
 
 plot_iterations_vs_discount(gammas, iterations_in_place, iterations_two_array)
