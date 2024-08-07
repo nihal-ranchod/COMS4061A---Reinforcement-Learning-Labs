@@ -34,8 +34,9 @@ class GridworldMDP:
     def is_terminal(self, state):
         return state == self.goal_state
 
-# Policy Evaluation in Place: The value function is updated immediately after evaluating each state. 
-# This means that the new value of a state is used in the subsequent evaluations of other states within the same iteration.
+# Policy Evaluation in Place: 
+# The value function is updated immediately after evaluating each state. 
+# The new value of a state is used in the subsequent evaluations of other states within the same iteration.
 def policy_evaluation_in_place(env, gamma, theta):
     V = np.zeros((env.grid_size, env.grid_size))
     iterations = 0
@@ -56,8 +57,9 @@ def policy_evaluation_in_place(env, gamma, theta):
             break
     return V, iterations
 
-# Policy Evaluation with Two Arrays: In the two-array policy evaluation algorithm, a temporary array (V_new) is used to store 
-# the updated values of the states. The value function V is only updated after all states have been evaluated in the current iteration
+# Policy Evaluation with Two Arrays: 
+# A temporary array (V_new) is used to store the updated values of the states.
+# The value function V is only updated after all states have been evaluated in the current iteration
 def policy_evaluation_two_array(env, gamma, theta):
     V = np.zeros((env.grid_size, env.grid_size))
     iterations = 0
