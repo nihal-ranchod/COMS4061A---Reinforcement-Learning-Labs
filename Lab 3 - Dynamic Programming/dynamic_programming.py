@@ -97,8 +97,6 @@ def main():
     plt.figure(figsize=(6, 5))
     sns.heatmap(V, annot=True, cmap='crest', cbar=True)
     plt.title('Value Function Heatmap for $\gamma$ = 1')
-    plt.xlabel('Y axis')
-    plt.ylabel('X axis')
     plt.show()
 
     plt.figure(figsize=(8, 6))
