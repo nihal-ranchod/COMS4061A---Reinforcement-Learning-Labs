@@ -79,39 +79,36 @@ def policy_evaluation_two_array(env, gamma, theta):
             break
     return V, iterations
 
-def plot_value_function(V, title):
-    plt.figure(figsize=(6, 5))  # Adjust figure size if needed
+def main():
+    env = GridworldMDP()
+    theta = 0.01
+    gammas = np.logspace(-0.2, 0, num=20)
+
+    iterations_in_place = []
+    iterations_two_array = []
+
+    for gamma in gammas:
+        _, it_in_place = policy_evaluation_in_place(env, gamma, theta)
+        _, it_two_array = policy_evaluation_two_array(env, gamma, theta)
+        iterations_in_place.append(it_in_place)
+        iterations_two_array.append(it_two_array)
+
+    V, _ = policy_evaluation_in_place(env, 1, theta)
+    plt.figure(figsize=(6, 5))
     sns.heatmap(V, annot=True, cmap='crest', cbar=True)
-    plt.title(title)
+    plt.title('Value Function Heatmap for $\gamma$ = 1')
     plt.xlabel('Y axis')
-    plt.ylabel('X axis')  # Adjust labels as per your grid representation
+    plt.ylabel('X axis')
     plt.show()
 
-def plot_iterations_vs_discount(gammas, iterations_in_place, iterations_two_array):
-    plt.figure(figsize=(8, 6))  # Adjust figure size if needed
-    plt.plot(gammas, iterations_in_place, label='In-place', color="slateblue")
-    plt.plot(gammas, iterations_two_array, label='Two-array', color="deeppink")
-    plt.xlabel('Discount Rate (gamma)')
+    plt.figure(figsize=(8, 6))
+    plt.plot(gammas, iterations_in_place, label='Policy Evaluation In-place', color="slateblue")
+    plt.plot(gammas, iterations_two_array, label='Policy Evaluation Two-array', color="deeppink")
+    plt.xlabel('Discount Rate $\gamma$')
     plt.ylabel('Iterations to Convergence')
-    plt.xscale('log')
-    plt.title('Iterations vs Discount Rate')
+    plt.title('Convergence Rates for Policy Evaluation Algorithms')
     plt.legend()
     plt.show()
-
-env = GridworldMDP()
-theta = 0.01
-gammas = np.logspace(-0.2, 0, num=20)
-
-iterations_in_place = []
-iterations_two_array = []
-
-for gamma in gammas:
-    _, it_in_place = policy_evaluation_in_place(env, gamma, theta)
-    _, it_two_array = policy_evaluation_two_array(env, gamma, theta)
-    iterations_in_place.append(it_in_place)
-    iterations_two_array.append(it_two_array)
-
-V, _ = policy_evaluation_in_place(env, 1, theta)
-plot_value_function(V, 'Value Function Heatmap for gamma = 1')
-
-plot_iterations_vs_discount(gammas, iterations_in_place, iterations_two_array)
+    
+if __name__ == '__main__':
+    main()
