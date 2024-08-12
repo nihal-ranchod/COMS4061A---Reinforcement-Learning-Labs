@@ -1,3 +1,6 @@
+#Nihal Ranchod - 2427378
+#Lisa Godwin -2437980
+
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
