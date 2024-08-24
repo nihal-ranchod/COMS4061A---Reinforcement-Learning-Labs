@@ -11,3 +11,6 @@
 
 
 ### Lab 3: Dynamic Programming: [Lab 3 PDF](./Lab%203%20-%20Dynamic%20Programming/Lab%203.pdf)
+
+
+### Lab 4: Model Free Learning: [Lab 4 PDF](./Lab%204%20-%20Model%20Free%20Learning/Lab%204%20MFL.pdf)
