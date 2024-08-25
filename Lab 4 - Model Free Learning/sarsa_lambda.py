@@ -55,27 +55,27 @@ def sarsa_lambda(env, lambda_, num_episodes, alpha, epsilon):
 
     return Q_values_per_episode, returns
 
-def save_averaged_heatmap(average_Q_values, episode, lambda_str):
-    averaged_value_function = np.max(average_Q_values, axis=1).reshape(grid_shape)
-    plt.figure(figsize=(8, 6))
+# def save_averaged_heatmap(average_Q_values, episode, lambda_str):
+#     averaged_value_function = np.max(average_Q_values, axis=1).reshape(grid_shape)
+#     plt.figure(figsize=(8, 6))
     
-    sns.heatmap(
-        averaged_value_function, 
-        cmap='mako', 
-        annot=False, 
-        fmt=".1f", 
-        cbar=True, 
-        square=True, 
-        xticklabels=False, 
-        yticklabels=False
-    )
+#     sns.heatmap(
+#         averaged_value_function, 
+#         cmap='mako', 
+#         annot=False, 
+#         fmt=".1f", 
+#         cbar=True, 
+#         square=True, 
+#         xticklabels=False, 
+#         yticklabels=False
+#     )
     
-    plt.title(f'Average Value Function Heatmap\nλ={lambda_str}, Episode {episode + 1}')
+#     plt.title(f'Average Value Function Heatmap\nλ={lambda_str}, Episode {episode + 1}')
     
-    folder = f"Lab 4 - Model Free Learning/heatmaps/averaged_lambda_{lambda_str}"
-    os.makedirs(folder, exist_ok=True)
-    plt.savefig(f"{folder}/episode_{episode + 1}.png")
-    plt.close()
+#     folder = f"Lab 4 - Model Free Learning/heatmaps/averaged_lambda_{lambda_str}"
+#     os.makedirs(folder, exist_ok=True)
+#     plt.savefig(f"{folder}/episode_{episode + 1}.png")
+#     plt.close()
 
 def main():
     # Experiment parameters
@@ -99,11 +99,11 @@ def main():
             all_returns.append(returns)
         
         # Average the Q-values across all runs
-        averaged_Q_values = all_Q_values / num_runs
+        #averaged_Q_values = all_Q_values / num_runs
 
-        # Save the heatmaps for each episode
-        for episode in range(num_episodes):
-            save_averaged_heatmap(averaged_Q_values[episode], episode, lambda_str)
+        # # Save the heatmaps for each episode
+        # for episode in range(num_episodes):
+        #     save_averaged_heatmap(averaged_Q_values[episode], episode, lambda_str)
 
         # Calculate average return and standard deviation over all runs
         avg_returns = np.mean(all_returns, axis=0)
@@ -121,7 +121,7 @@ def main():
     plt.title('SARSA(λ) Performance on CliffWalking')
     plt.legend(loc='lower right') 
     plt.grid(True)
-    plt.savefig('sarsa_lambda_average_return.png')
+    plt.savefig("Lab 4 - Model Free Learning/sarsa_lambda_average_return.png")
     plt.show()
 
 if __name__ == '__main__':
