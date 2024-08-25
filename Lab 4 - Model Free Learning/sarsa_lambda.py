@@ -61,7 +61,7 @@ def save_averaged_heatmap(average_Q_values, episode, lambda_str):
     
     sns.heatmap(
         averaged_value_function, 
-        cmap=sns.cubehelix_palette(as_cmap=True), 
+        cmap='mako', 
         annot=False, 
         fmt=".1f", 
         cbar=True, 
@@ -113,10 +113,13 @@ def main():
         plt.plot(avg_returns, label=f'λ = {lambda_}')
         plt.fill_between(range(num_episodes), avg_returns - std_returns, avg_returns + std_returns, alpha=0.2)
 
+    # Set y-axis range based on expected returns in CliffWalking
+    plt.ylim(-500, 10)  # Adjust as needed
+
     plt.xlabel('Episodes')
     plt.ylabel('Average Return')
     plt.title('SARSA(λ) Performance on CliffWalking')
-    plt.legend(loc=4)
+    plt.legend(loc='lower right') 
     plt.grid(True)
     plt.savefig('sarsa_lambda_average_return.png')
     plt.show()
