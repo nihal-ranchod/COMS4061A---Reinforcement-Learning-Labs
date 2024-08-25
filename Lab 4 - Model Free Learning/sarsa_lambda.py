@@ -1,14 +1,11 @@
 import gym
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
-import os
 
 # Initialize the CliffWalking environment
 env = gym.make('CliffWalking-v0')
 num_states = env.observation_space.n
 num_actions = env.action_space.n
-grid_shape = (4, 12)  # For plotting the grid
 
 def epsilon_greedy_policy(Q, state, epsilon):
     """Select action using ε-greedy policy."""
@@ -55,28 +52,6 @@ def sarsa_lambda(env, lambda_, num_episodes, alpha, epsilon):
 
     return Q_values_per_episode, returns
 
-# def save_averaged_heatmap(average_Q_values, episode, lambda_str):
-#     averaged_value_function = np.max(average_Q_values, axis=1).reshape(grid_shape)
-#     plt.figure(figsize=(8, 6))
-    
-#     sns.heatmap(
-#         averaged_value_function, 
-#         cmap='mako', 
-#         annot=False, 
-#         fmt=".1f", 
-#         cbar=True, 
-#         square=True, 
-#         xticklabels=False, 
-#         yticklabels=False
-#     )
-    
-#     plt.title(f'Average Value Function Heatmap\nλ={lambda_str}, Episode {episode + 1}')
-    
-#     folder = f"Lab 4 - Model Free Learning/heatmaps/averaged_lambda_{lambda_str}"
-#     os.makedirs(folder, exist_ok=True)
-#     plt.savefig(f"{folder}/episode_{episode + 1}.png")
-#     plt.close()
-
 def main():
     # Experiment parameters
     num_runs = 100
@@ -88,7 +63,6 @@ def main():
     plt.figure(figsize=(12, 8))
 
     for lambda_ in lambda_values:
-        lambda_str = str(lambda_).replace('.', '_')  # For folder naming
         all_Q_values = np.zeros((num_episodes, num_states, num_actions))
 
         all_returns = []
@@ -97,13 +71,6 @@ def main():
             Q_values_per_episode, returns = sarsa_lambda(env, lambda_, num_episodes, alpha, epsilon)
             all_Q_values += Q_values_per_episode
             all_returns.append(returns)
-        
-        # Average the Q-values across all runs
-        #averaged_Q_values = all_Q_values / num_runs
-
-        # # Save the heatmaps for each episode
-        # for episode in range(num_episodes):
-        #     save_averaged_heatmap(averaged_Q_values[episode], episode, lambda_str)
 
         # Calculate average return and standard deviation over all runs
         avg_returns = np.mean(all_returns, axis=0)
