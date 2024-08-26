@@ -60,7 +60,7 @@ def generate_animation(num_episodes, lambda_values, alpha, epsilon):
     for episode in range(1, num_episodes + 1):
         images.append(imageio.imread(f"{folder}/episode_{episode}.png"))
     
-    imageio.mimsave("Lab 4 - Model Free Learning/sarsa_lambda_animation.gif", images, duration=0.5)  # Adjust duration as needed
+    imageio.mimsave("Lab 4 - Model Free Learning/sarsa_lambda_animation.gif", images, duration=10)
 
 def main():
     num_episodes = 200
