@@ -14,3 +14,6 @@
 
 
 ### Lab 4: Model Free Learning: [Lab 4 PDF](./Lab%204%20-%20Model%20Free%20Learning/Lab%204%20MFL.pdf)
+
+
+### Lab 5: Function Approximation: [Lab 5 PDF](./Lab%205%20-%20Function%20Approximation/Lab%205%20-%20FA.png)
