@@ -64,7 +64,7 @@ def run_experiment(epsilon: float, alpha: float, num_episodes: int, average_runs
     
     return q
 
-def show_trained_model(num_episodes: int, epsilon: float, alpha: float) -> None:
+def run_animation(num_episodes: int, epsilon: float, alpha: float) -> None:
     discount = 1.0
     env = gym.make("MountainCar-v0")
     _, q = sarsa_semi_gradient(env, num_episodes, discount, epsilon, alpha)
@@ -96,7 +96,7 @@ def main() -> None:
     q = run_experiment(epsilon, alpha, num_episodes, average_runs)
     
     # Show the trained model
-    show_trained_model(num_episodes, epsilon, alpha)
+    run_animation(num_episodes, epsilon, alpha)
 
 if __name__ == "__main__":
     main()
