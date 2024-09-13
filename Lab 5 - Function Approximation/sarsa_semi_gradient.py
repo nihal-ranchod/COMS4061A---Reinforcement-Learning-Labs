@@ -1,3 +1,9 @@
+"""
+Nihal Ranchod - 2427378
+Lisa Godiwn - 2437980
+"""
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 import gym
