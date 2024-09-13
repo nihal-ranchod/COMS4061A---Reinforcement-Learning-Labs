@@ -3,7 +3,6 @@ Nihal Ranchod - 2427378
 Lisa Godiwn - 2437980
 """
 
-
 import numpy as np
 import matplotlib.pyplot as plt
 import gym
@@ -99,7 +98,7 @@ def main() -> None:
     epsilon = 0.1
     num_episodes = 500
     average_runs = 100
-    q = run_experiment(epsilon, alpha, num_episodes, average_runs)
+    run_experiment(epsilon, alpha, num_episodes, average_runs)
     
     # Show the trained model
     run_animation(num_episodes, epsilon, alpha)
